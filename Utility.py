@@ -206,3 +206,16 @@ class NoiseReducer():
         
         return new_data
         
+    def remove_overlap(self):
+        for i in range(self.current_data_values.shape[0]-1):
+            if abs(self.current_data_values[i, 0] - self.current_data_values[i+1, 0]) < 0.001:
+                self.del_list.append(self.current_data_values[i+1, -1])
+
+        self.del_list = list(set(self.del_list))
+        self.current_data = self.data.drop(self.del_list, axis=0)
+        self.current_data_values = np.delete(self.indexed_data_values, self.del_list, axis=0)
+        self.stack.append(self.current_data)
+        self.stack_value.append(self.current_data_values)
+        self.stack_index += 1        
+        return      
+
